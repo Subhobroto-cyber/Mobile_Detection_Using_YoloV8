@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectInsight | Login</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #f97316;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --bg: #f9fafb;
+            --bg-card: #ffffff;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border: #e5e7eb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background-color: var(--bg-card);
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .logo svg {
+            margin-right: 0.75rem;
+        }
+        
+        .main-container {
+            flex: 1;
+            padding: 2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .auth-card {
+            background-color: var(--bg-card);
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+        
+        .auth-header {
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .auth-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+        
+        .auth-body {
+            padding: 1.5rem;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-light);
+            position: relative;
+            transition: color 0.2s ease;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            border: none;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .forgot-password {
+            display: block;
+            text-align: right;
+            font-size: 0.8125rem;
+            color: var(--primary);
+            text-decoration: none;
+            margin-top: 0.5rem;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--border);
+        }
+        
+        .divider::before {
+            margin-right: 1rem;
+        }
+        
+        .divider::after {
+            margin-left: 1rem;
+        }
+        
+        .social-logins {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            background-color: var(--bg-card);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .social-btn:hover {
+            border-color: var(--primary);
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+        
+        .social-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        
+        .social-text {
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+        
+        .terms {
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-align: center;
+        }
+        
+        .terms a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .terms a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        @media (max-width: 480px) {
+            .social-logins {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 8h1a4 4 0 1 1 0 8h-1"></path>
+                        <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path>
+                        <line x1="6" y1="2" x2="6" y2="4"></line>
+                        <line x1="10" y1="2" x2="10" y2="4"></line>
+                        <line x1="14" y1="2" x2="14" y2="4"></line>
+                    </svg>
+                    ObjectInsight
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2 class="auth-title">Welcome to ObjectInsight</h2>
+                <p class="auth-subtitle">AI-Powered Object Detection</p>
+            </div>
+            <div class="auth-body">
+                <div class="tabs">
+                    <div class="tab active" data-tab="login">Login</div>
+                    <div class="tab" data-tab="signup">Sign Up</div>
+                </div>
+                
+                <!-- Login Tab Content -->
+                <div class="tab-content active" id="login-content">
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label class="form-label" for="login-email">Email</label>
+                            <input type="email" class="form-input" id="login-email" placeholder="your@email.com" required>
+                            <div class="error-message" id="login-email-error">Please enter a valid email address</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="login-password">Password</label>
+                            <input type="password" class="form-input" id="login-password" placeholder="••••••••" required>
+                            <div class="error-message" id="login-password-error">Password must be at least 8 characters</div>
+                            <a href="#" class="forgot-password">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                    
+                    <div class="divider">or continue with</div>
+                    
+                    <div class="social-logins">
+                        <button class="social-btn" onclick="socialLogin('google')">
+                            <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z" fill="#4285F4"/>
+                                <path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z" fill="#4285F4"/>
+                            </svg>
+                            <span class="social-text">Google</span>
+                        </button>
+                        <button class="social-btn" onclick="socialLogin('facebook')">
+                            <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2"/>
+                            </svg>
+                            <span class="social-text">Facebook</span>
+                        </button>
+                        <button class="social-btn" onclick="socialLogin('apple')">
+                            <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14.94 5.19A4.38 4.38 0 0 0 16 2a4.44 4.44 0 0 0-3 1.52 4.17 4.17 0 0 0-1 3.09 3.69 3.69 0 0 0 2.94-1.42zM12 10.5c1.73 0 3.09-1.46 6-1.46 3.3 0 4.5 1.96 4.5 1.96s-2.5 1.28-2.5 4.38c0 3.5 3.13 4.62 3.13 4.62s-2.12 6-5.03 6c-1.33 0-2.34-.87-3.85-.87-1.54 0-2.63.91-3.89.91C7.25 26 4 20.46 4 15.38 4 10.39 7.33 9 9.33 9c1.76 0 3.13 1.5 2.67 1.5z" fill="#000"/>
+                            </svg>
+                            <span class="social-text">Apple</span>
+                        </button>
+                        <button class="social-btn" onclick="socialLogin('github')">
+                            <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" fill="#000"/>
+                            </svg>
+                            <span class="social-text">GitHub</span>
+                        </button>
+                        <button class="social-btn" onclick="socialLogin('microsoft')">
+                            <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 0h11.377v11.372H0zm12.623 0H24v11.372H12.623zM0 12.623h11.377V24H0zm12.623 0H24V24H12.623" fill="#F25022"/>
+                            </svg>
+                            <span class="social-text">Microsoft</span>
+                        </button>
+                        <button class="social-btn" onclick="socialLogin('yahoo')">
+                            <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.828 7.242h-4.393l-3.06 7.033-3.35-7.033H4.392L9.81 18.566l-2.092 4.75h1.942l7.941-16.074h2.227v-1.01l-1.924.01h1.924z" fill="#6001D2"/>
+                            </svg>
+                            <span class="social-text">Yahoo</span>
+                        </button>
+                    </div>
+                    
+                    <p class="terms">
+                        By continuing, you agree to ObjectInsight's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </p>
+                </div>
+                
+                <!-- Sign Up Tab Content -->
+                <div class="tab-content" id="signup-content">
+                    <form id="signup-form">
+                        <div class="form-group">
+                            <label class="form-label" for="signup-name">Full Name</label>
+                            <input type="text" class="form-input" id="signup-name" placeholder="Your Name" required>
+                            <div class="error-message" id="signup-name-error">Please enter your name</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="signup-email">Email</label>
+                            <input type="email" class="form-input" id="signup-email" placeholder="your@email.com" required>
+                            <div class="error-message" id="signup-email-error">Please enter a valid email address</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="signup-password">Password</label>
+                            <input type="password" class="form-input" id="signup-password" placeholder="••••••••" required>
+                            <div class="error-message" id="signup-password-error">Password must be at least 8 characters</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="signup-confirm">Confirm Password</label>
+                            <input type="password" class="form-input" id="signup-confirm" placeholder="••••••••" required>
+                            <div class="error-message" id="signup-confirm-error">Passwords do not match</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Account</button>
+                    </form>
+                    
+                    <div class="divider">or sign up with</div>
+                    
+                    <div class="social-logins">
+                        <button class="social-btn" onclick="socialSignup('google')">
+                            <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z" fill="#4285F4"/>
+                            </svg>
+                            <span class="social-text">Google</span>
+                        </button>
+                        <button class="social-btn" onclick="socialSignup('facebook')">
+                            <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2"/>
+                            </svg>
+                            <span class="social-text">Facebook</span>
+                        </button>
+                        <button class="social-btn" onclick="socialSignup('apple')">
+                            <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14.94 5.19A4.38 4.38 0 0 0 16 2a4.44 4.44 0 0 0-3 1.52 4.17 4.17 0 0 0-1 3.09 3.69 3.69 0 0 0 2.94-1.42zM12 10.5c1.73 0 3.09-1.46 6-1.46 3.3 0 4.5 1.96 4.5 1.96s-2.5 1.28-2.5 4.38c0 3.5 3.13 4.62 3.13 4.62s-2.12 6-5.03 6c-1.33 0-2.34-.87-3.85-.87-1.54 0-2.63.91-3.89.91C7.25 26 4 20.46 4 15.38 4 10.39 7.33 9 9.33 9c1.76 0 3.13 1.5 2.67 1.5z" fill="#000"/>
+                            </svg>
+                            <span class="social-text">Apple</span>
+                        </button>
+                        <button class="social-btn" onclick="socialSignup('github')">
+                            <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" fill="#000"/>
+                            </svg>
+                            <span class="social-text">GitHub</span>
+                        </button>
+                        <button class="social-btn" onclick="socialSignup('microsoft')">
+                            <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 0h11.377v11.372H0zm12.623 0H24v11.372H12.623zM0 12.623h11.377V24H0zm12.623 0H24V24H12.623" fill="#F25022"/>
+                            </svg>
+                            <span class="social-text">Microsoft</span>
+                        </button>
+                        <button class="social-btn" onclick="socialSignup('yahoo')">
+                            <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.828 7.242h-4.393l-3.06 7.033-3.35-7.033H4.392L9.81 18.566l-2.092 4.75h1.942l7.941-16.074h2.227v-1.01l-1.924.01h1.924z" fill="#6001D2"/>
+                            </svg>
+                            <span class="social-text">Yahoo</span>
+                        </button>
+                    </div>
+                    
+                    <p class="terms">
+                        By signing up, you agree to ObjectInsight's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab Switching
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add('active');
+                    document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
+                });
+            });
+            
+            // Form Validation
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                let isValid = true;
+                
+                // Email validation
+                if (!validateEmail(email)) {
+                    document.getElementById('login-email-error').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('login-email-error').style.display = 'none';
+                }
+                
+                // Password validation
+                if (password.length < 8) {
+                    document.getElementById('login-password-error').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('login-password-error').style.display = 'none';
+                }
+                
+                if (isValid) {
+                    // Submit form (in a real app this would send data to server)
+                    alert('Login successful! Redirecting to dashboard...');
+                    setTimeout(() => {
+                        window.location.href = 'home.html';// Redirect to main page
+                    }, 1000);
+                }
+            });
+            
+            signupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('signup-name').value;
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                const confirm = document.getElementById('signup-confirm').value;
+                let isValid = true;
+                
+                // Name validation
+                if (!name.trim()) {
+                    document.getElementById('signup-name-error').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('signup-name-error').style.display = 'none';
+                }
+                
+                // Email validation
+                if (!validateEmail(email)) {
+                    document.getElementById('signup-email-error').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('signup-email-error').style.display = 'none';
+                }
+                
+                // Password validation
+                if (password.length < 8) {
+                    document.getElementById('signup-password-error').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('signup-password-error').style.display = 'none';
+                }
+                
+                // Confirm password validation
+                if (password !== confirm) {
+                    document.getElementById('signup-confirm-error').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('signup-confirm-error').style.display = 'none';
+                }
+                
+                if (isValid) {
+                    // Submit form (in a real app this would send data to server)
+                    alert('Account created successfully! Redirecting to dashboard...');
+                    setTimeout(() => {
+                        window.location.href = 'home.html';// Redirect to main page
+                    }, 1000);
+                }
+            });
+            
+            // Helper function for email validation
+            function validateEmail(email) {
+                const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            }
+        });
+        
+        // Social login/signup functions
+        function socialLogin(provider) {
+            // In a real application, this would redirect to OAuth provider
+            console.log(`Logging in with ${provider}`);
+            alert(`Logging in with ${provider}... Redirecting`);
+            setTimeout(() => {
+                window.location.href = 'home.html'; // Redirect to main page
+            }, 1000);
+        }
+        
+        function socialSignup(provider) {
+            // In a real application, this would redirect to OAuth provider
+            console.log(`Signing up with ${provider}`);
+            alert(`Signing up with ${provider}... Redirecting`);
+            setTimeout(() => {
+                window.location.href = 'home.html';// Redirect to main page
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
